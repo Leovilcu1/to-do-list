@@ -1,7 +1,10 @@
 <template>
-  <div class="home">
+  <div class="container text-center">
+    <div class="home">
     <TodoList msg="Welcome to Your Vue.js App"/>
   </div>
+  </div>
+  
 </template>
 
 <script>

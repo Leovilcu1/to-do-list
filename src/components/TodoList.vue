@@ -1,114 +1,73 @@
 <template>
-  <div class="container">
-    <h2 class="text-center mt-5">Lista Della Spesa</h2>
-    <!-- Input -->
-    <div class="d-flex">
-      <input v-model="newTask" type="text" placeholder="Inserisci Spesa" class="form-control">
-      <button @click="submitTask()" class="btn btn-warning rounded-0">Aggiungi</button>
-    </div>
-    <!-- Task table -->
-    <table class="table mt-5">
-  <thead>
-    <tr>
-      <th scope="col">Task</th>
-      <th scope="col">Status</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="(task,index) in tasks" :key="index ">
-      <th scope="row">
-        <span :class="{'fatto': task.status ==='fatto'}">
+  <div>
+    <h1>Task List</h1>
+    <input v-model="newTask" placeholder="Add a new task...">
+    <button @click="addTask">Add</button>
+
+    <h2>Tasks</h2>
+    <ul>
+      <li class="py-2 d-flex justify-content-evenly" v-for="(task, index) in tasks" :key="index">
+        <div :class="{ 'fatto': task.completed }">
           {{ task.name }}
-        </span>
-      </th>
-      <td>
-        <span @click="changeStatus(index)" class="pointer text-light p-2 rounded-3" :class="{'bg-success': task.status === 'fatto','bg-danger': task.status === 'da fare'}">
-          {{ firstCharUpper(task.status)}}
-        </span>
-      </td>
-      <td class="text-center">
-        <div @click="editTask(index)">
-          <span class="fa fa-pen mx-3 pointer"></span>
         </div>
-        <div @click="deleteTask(index)">
-          <span  class="fa fa-trash pointer"></span>
+        <div >
+          <button @click="archiveTask(index)">Archive</button>
+          <button @click="cancelTask(index)">Cancel</button>
+          <button @click="editTask(index)">Edit</button>
         </div>
-        <div v-if="task.status === 'fatto' && !task.archived" @click="archiveTask(index)">
-          <span  class="fa fa-archive pointer"></span>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+      </li>
+    </ul>
+
+    <h2>Archived Tasks</h2>
+    <ul>
+      <li v-for="(task, index) in archivedTasks" :key="index">
+        {{ task.name }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'TodoList',
-  props: {
-    msg: String
-  },
-  data(){
-    return{
-      newTask: '',
-      editedTask:null,
-      availableStatuses:['da fare', 'fatto'],
-      archivedTasks:[],
-      tasks:[
-        {
-          name:'pane',
-          status:'fatto',
-          archive: false
-        },
-        {
-          name:'pane',
-          status:'da fare',
-          archive: false
-        },
-      ]
-    }
-  },methods:{
-    submitTask(){
-      if(this.newTask.length === 0) return;
-      if(this.editedTask === null){
-        this.tasks.push({
-        name: this.newTask,
-        status:'da fare'
-        });
-      }else{
-        this.tasks[this.editedTask].name=this.newTask;
-        this.editedTask = null;
+  export default {
+    data () {
+      return {
+        newTask: '',
       }
-      this.newTask= ''; 
+    },
+    computed: {
+      tasks () {
+        return this.$store.state.tasks
       },
-      deleteTask(index){
-        this.tasks.splice(index,1);
+      archivedTasks () {
+        return this.$store.state.archivedTasks
+      }
+    },
+    methods: {
+      addTask () {
+        if (this.newTask.trim()) {
+          this.$store.commit('addTask', { name: this.newTask, completed: false })
+          this.newTask = ''
+        }
       },
-      editTask(index){
-        this.newTask = this.tasks[index].name;
-        this.editedTask = index;
+      archiveTask (index) {
+        this.$store.commit('archiveTask', index)
+      },
+      cancelTask (index) {
+        this.$store.commit('cancelTask', index)
+      },
+      editTask (index) {
+        const taskName = prompt('Enter the new task name', this.tasks[index].name)
+        if (taskName !== null) {
+          this.$store.commit('editTask', { index, name: taskName })
+        }
       },
       changeStatus(index){
        let newIndex=this.availableStatuses.indexOf(this.tasks[index].status);
        if(++newIndex > 1) newIndex = 0;
        this.tasks[index].status=this.availableStatuses[newIndex];
       },
-      firstCharUpper(str){
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      },
-      archiveTask(index) {
-      let taskToArchive = this.tasks[index];
-      if (!taskToArchive.archived) {
-        taskToArchive.archived = true;
-        this.archivedTasks.push(taskToArchive.name);
+    }
   }
-  this.tasks.splice(index, 1);
-}
-
-  }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -118,5 +77,8 @@ export default {
   }
   .fatto{
     text-decoration: line-through;
+  }
+  ul>li{
+    list-style:none;
   }
 </style>
