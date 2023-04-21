@@ -7,23 +7,24 @@
     <h2>Tasks</h2>
     <ul>
       <li class="py-2 d-flex justify-content-evenly" v-for="(task, index) in tasks" :key="index">
-        <div :class="{ 'fatto': task.completed }">
+        <div :class="{ 'fatto': task.completed,'fatto':task.status === 'fatto'}">
           {{ task.name }}
         </div>
+        <span class="btn btn-warning" v-if="task.status === 'fatto' && !task.archived" @click="archiveTask(index)">archivia</span>
         <div >
-          <button @click="archiveTask(index)">Archive</button>
           <button @click="cancelTask(index)">Cancel</button>
-          <button @click="editTask(index)">Edit</button>
+          <button  @click="editTask(index)">Edit</button>
+          <span @click="completedTask(index)" class="pointer text-light p-2 rounded-3" :class="{'bg-success': task.status === 'fatto','bg-danger': task.status === 'da fare'}">{{ task.status}}</span>
         </div>
       </li>
     </ul>
 
-    <h2>Archived Tasks</h2>
+    <!-- <h2>Archived Tasks</h2>
     <ul>
       <li v-for="(task, index) in archivedTasks" :key="index">
         {{ task.name }}
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -45,7 +46,7 @@
     methods: {
       addTask () {
         if (this.newTask.trim()) {
-          this.$store.commit('addTask', { name: this.newTask, completed: false })
+          this.$store.commit('addTask', { name: this.newTask, completed: false,status:'da fare' })
           this.newTask = ''
         }
       },
@@ -61,11 +62,10 @@
           this.$store.commit('editTask', { index, name: taskName })
         }
       },
-      changeStatus(index){
-       let newIndex=this.availableStatuses.indexOf(this.tasks[index].status);
-       if(++newIndex > 1) newIndex = 0;
-       this.tasks[index].status=this.availableStatuses[newIndex];
-      },
+      completedTask(index){
+        this.$store.commit('completedTask',index)
+      }
+      
     }
   }
 </script>

@@ -3,7 +3,7 @@
     <h2>Archived Tasks</h2>
     <ul>
       <li v-for="(task, index) in archivedTasks" :key="index">
-        {{ task }}
+        {{ task.name }}
       </li>
     </ul>
     <p>Archived task count: {{ archivedTaskCount }}</p>
