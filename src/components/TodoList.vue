@@ -1,14 +1,16 @@
 <template>
   <div>
-    <h1>Task List</h1>
+
+    <h1>Task List - {{ this.$store.state.currentUser}}</h1>
     <input v-model="newTask" placeholder="Add a new task...">
     <button @click="addTask">Add</button>
 
     <h2>Tasks</h2>
     <ul>
+      
       <li class="py-2 d-flex justify-content-evenly" v-for="(task, index) in tasks" :key="index">
         <div :class="{ 'fatto': task.completed,'fatto':task.status === 'fatto'}">
-          {{ task.name }}
+          {{ task.name }} 
         </div>
         <span class="btn btn-warning" v-if="task.status === 'fatto' && !task.archived" @click="archiveTask(index)">archivia</span>
         <div >
@@ -33,6 +35,7 @@
     data () {
       return {
         newTask: '',
+        newUser:''
       }
     },
     computed: {
@@ -46,8 +49,9 @@
     methods: {
       addTask () {
         if (this.newTask.trim()) {
-          this.$store.commit('addTask', { name: this.newTask, completed: false,status:'da fare' })
+          this.$store.commit('addTask', { name: this.newTask, completed: false,status:'da fare', user:this.$store.state.currentUser})
           this.newTask = ''
+          console.log(this.$store.state.tasks)
         }
       },
       archiveTask (index) {

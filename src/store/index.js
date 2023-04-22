@@ -6,24 +6,22 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     tasks: [
-      { name: 'pane', completed: false, status:'da fare' },
-      { name: 'latte', completed: false,status:'da fare' },
-      { name: 'pasta', completed: false, status:'da fare' },
+      { name: 'pane', completed: false, status:'da fare',user:'leo' },
+      { name: 'latte', completed: false,status:'da fare',user:'caro' },
+      { name: 'pasta', completed: false, status:'da fare',user:'vasea' },
     ],
     archivedTasks: [],
     availableStatuses:['fatto','da fare'],
-
+    currentUser:"", // ID utente corrente
+    userTasks: [], // Elenco dei task associati all'utente corrente
   },
   mutations: {
     addTask (state, task) {
       state.tasks.push(task)
-
     },
     archiveTask (state, index) {
         const task = state.tasks.splice(index, 1)[0]
         state.archivedTasks.push(task)
-
-      
     },
      cancelTask (state, index) {
       state.tasks.splice(index, 1)
@@ -35,9 +33,10 @@ export default new Vuex.Store({
        let newIndex=state.availableStatuses.indexOf(state.tasks[index].status);
        if(++newIndex > 1) newIndex = 0;
        state.tasks[index].status=state.availableStatuses[newIndex];
-       console.log(state.tasks[index].status)
       },
-    
+    addNameLogin(state,userTasks ){
+      state.userTasks.push(userTasks)
+    }
   },
   getters: {
     taskCount: state => {

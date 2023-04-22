@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue' 
+import LoginTask from '../components/Login.vue' 
 
 
 Vue.use(VueRouter)
@@ -8,6 +9,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'LoginTask',
+    component: LoginTask
+  },
+  {
+    path: '/home',
     name: 'home',
     component: HomeView
   },
