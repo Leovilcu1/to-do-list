@@ -10,7 +10,7 @@
       
       <li class="py-2 d-flex justify-content-evenly" v-for="(task, index) in tasks" :key="index">
         <div :class="{ 'fatto': task.completed,'fatto':task.status === 'fatto'}">
-          {{ task.name }} 
+          {{ task.name }} {{ task.user }}
         </div>
         <span class="btn btn-warning" v-if="task.status === 'fatto' && !task.archived" @click="archiveTask(index)">archivia</span>
         <div >

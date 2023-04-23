@@ -20,6 +20,7 @@
             addNameLogin() {
                 this.$store.commit('addNameLogin',this.name)
                 this.$store.state.currentUser = this.$store.state.userTasks[this.$store.state.userTasks.length-1];
+                
                 // console.log(this.$store.state.userTasks[this.$store.state.currentUser])
                 console.log(this.$store.state.currentUser)
             }

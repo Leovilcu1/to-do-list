@@ -6,9 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     tasks: [
-      { name: 'pane', completed: false, status:'da fare',user:'leo' },
-      { name: 'latte', completed: false,status:'da fare',user:'caro' },
-      { name: 'pasta', completed: false, status:'da fare',user:'vasea' },
+      { name: 'pane', completed: false, status:'da fare',user:'Leo' },
+      { name: 'latte', completed: false,status:'da fare',user:'Caro' },
+      { name: 'pasta', completed: false, status:'da fare',user:'Giovanni' },
     ],
     archivedTasks: [],
     availableStatuses:['fatto','da fare'],
